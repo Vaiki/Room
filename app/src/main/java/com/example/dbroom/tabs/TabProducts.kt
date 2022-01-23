@@ -39,7 +39,9 @@ class TabProducts : Fragment() {
         productsViewModel =
             ViewModelProvider(this, productFactory!!).get(ProductViewModel::class.java)
         initRecyclerCategories()
-        // Inflate the layout for this fragment
+
+        binding?.deleteAllProducts?.setOnClickListener(View.OnClickListener { productsViewModel?.deleteAllProducts() })
+
         return binding?.root
     }
 

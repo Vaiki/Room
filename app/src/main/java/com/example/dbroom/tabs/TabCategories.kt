@@ -41,6 +41,8 @@ class TabCategories : Fragment() {
             ViewModelProvider(this, categoryFactory!!).get(CategoryViewModel::class.java)
         initRecyclerCategories()
         displayCategories()
+
+        binding?.deleteAllCategories?.setOnClickListener(View.OnClickListener { categoryViewModel?.deleteAll() })
         return binding?.root
     }
 
