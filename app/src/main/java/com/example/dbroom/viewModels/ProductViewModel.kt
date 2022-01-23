@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 
 class ProductViewModel (private val productRepository: ProductRepository) : ViewModel() {
 
-    val products = productRepository.products
+    val allProducts = productRepository.products
 
 
     fun getFilter (nameCategory:String, priceProduct:String):
