@@ -14,6 +14,7 @@ import androidx.room.Database
 import com.example.dbroom.R
 import com.example.dbroom.data.MyDataBase
 import com.example.dbroom.databinding.FragmentTabCategoriesBinding
+import com.example.dbroom.models.CategoryModel
 import com.example.dbroom.repositories.CategoryRepository
 import com.example.dbroom.viewModels.CategoryFactory
 import com.example.dbroom.viewModels.CategoryViewModel
@@ -48,7 +49,9 @@ class TabCategories : Fragment() {
 
     private fun initRecyclerCategories() {
         binding?.recyclerCategories?.layoutManager = LinearLayoutManager(context)
-        categoryAdapter = CategoryAdapter()
+        categoryAdapter =
+            CategoryAdapter({ categoryModel: CategoryModel -> deleteCategory(categoryModel) },
+                { categoryModel -> editCategory(categoryModel) })
         binding?.recyclerCategories?.adapter = categoryAdapter
     }
 
@@ -59,4 +62,18 @@ class TabCategories : Fragment() {
         })
     }
 
+   private fun deleteCategory(categoryModel: CategoryModel) {
+        categoryViewModel?.delete(categoryModel)
+    }
+    private fun editCategory(categoryModel: CategoryModel) {
+        val panelCategory = PanelEditCategory()
+        val parameters = Bundle()
+        //передаем данные в фрагмент редактирования,
+        //чтобы поле для редактирования было заполнено выбранным элементом
+        parameters.putString("idCategory", categoryModel.id.toString())
+        parameters.putString("nameCategory", categoryModel.name)
+        panelCategory.arguments = parameters
+
+        panelCategory.show((context as FragmentActivity).supportFragmentManager, "editCategory")
+    }
 }

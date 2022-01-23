@@ -45,7 +45,8 @@ class TabFilters : Fragment() {
 
     private fun initRecyclerFilterProducts(){
         binding?.recyclerFilter?.layoutManager = LinearLayoutManager(context)
-        productAdapter = ProductAdapter()
+        productAdapter = ProductAdapter({ productModel: ProductModel -> deleteProduct(productModel) },
+            { productModel -> editProduct(productModel) })
         binding?.recyclerFilter?.adapter = productAdapter
 
         displayFilterProducts()
@@ -56,5 +57,23 @@ class TabFilters : Fragment() {
             productAdapter?.setList(it)
             productAdapter?.notifyDataSetChanged()
         })
+    }
+    private fun deleteProduct(productModel: ProductModel) {
+        productViewModel?.deleteProduct(productModel)
+    }
+
+    private fun editProduct(productModel: ProductModel) {
+        val panelEditProduct = PanelEditProduct()
+        val parameters = Bundle()
+        //передаем данные в фрагмент редактирования,
+        // чтобы поля для редактирования были заполнены выбранным элементом
+
+        parameters.putString("idProduct", productModel.id.toString())
+        parameters.putString("nameProduct", productModel.name)
+        parameters.putString("categoryProduct", productModel.category)
+        parameters.putString("priceProduct", productModel.price)
+        panelEditProduct.arguments = parameters
+
+        panelEditProduct.show((context as FragmentActivity).supportFragmentManager, "editProduct")
     }
 }

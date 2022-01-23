@@ -7,9 +7,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dbroom.R
 import com.example.dbroom.databinding.ProductItemBinding
+import com.example.dbroom.models.CategoryModel
 import com.example.dbroom.models.ProductModel
 
-class ProductAdapter(
+class ProductAdapter(private val deleteProduct:(ProductModel)->Unit,
+                     private val editProduct:(ProductModel)->Unit
 
 ) : RecyclerView.Adapter<ProductAdapter.ProductHolder>() {
 
@@ -27,7 +29,7 @@ class ProductAdapter(
     }
 
     override fun onBindViewHolder(holder: ProductHolder, position: Int) {
-        holder.bind(productsList[position])
+        holder.bind(productsList[position],deleteProduct,editProduct)
     }
 
     fun setList(products: List<ProductModel>) {
@@ -40,13 +42,18 @@ class ProductAdapter(
     class ProductHolder(val binding: ProductItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(
-            productsModel: ProductModel) {
+            productsModel: ProductModel,
+            deleteProduct:(ProductModel)->Unit,
+            editProduct:(ProductModel)->Unit
+            ) {
 
             binding.idProduct.text = productsModel.id.toString()
             binding.nameProduct.text = productsModel.name
             binding.categoryProduct.text = productsModel.category
             binding.priceProduct.text = productsModel.price
 
+            binding.deleteProduct.setOnClickListener(View.OnClickListener { deleteProduct(productsModel) })
+            binding.editProduct.setOnClickListener(View.OnClickListener { editProduct(productsModel) })
 
 
         }

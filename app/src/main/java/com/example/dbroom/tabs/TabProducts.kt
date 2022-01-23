@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dbroom.R
 import com.example.dbroom.data.MyDataBase
 import com.example.dbroom.databinding.FragmentTabProductsBinding
+import com.example.dbroom.models.ProductModel
 import com.example.dbroom.repositories.ProductRepository
 import com.example.dbroom.viewModels.CategoryViewModel
 import com.example.dbroom.viewModels.ProductFactory
@@ -47,7 +48,9 @@ class TabProducts : Fragment() {
 
     private fun initRecyclerCategories() {
         binding?.recyclerProducts?.layoutManager = LinearLayoutManager(context)
-        productAdapter = ProductAdapter()
+        productAdapter =
+            ProductAdapter({ productModel: ProductModel -> deleteProduct(productModel) },
+                { productModel -> editProduct(productModel) })
         binding?.recyclerProducts?.adapter = productAdapter
         displayCategories()
     }
@@ -59,5 +62,23 @@ class TabProducts : Fragment() {
         })
     }
 
+    private fun deleteProduct(productModel: ProductModel) {
+        productsViewModel?.deleteProduct(productModel)
+    }
+
+    private fun editProduct(productModel: ProductModel) {
+        val panelEditProduct = PanelEditProduct()
+        val parameters = Bundle()
+        //передаем данные в фрагмент редактирования,
+        // чтобы поля для редактирования были заполнены выбранным элементом
+
+        parameters.putString("idProduct", productModel.id.toString())
+        parameters.putString("nameProduct", productModel.name)
+        parameters.putString("categoryProduct", productModel.category)
+        parameters.putString("priceProduct", productModel.price)
+        panelEditProduct.arguments = parameters
+
+        panelEditProduct.show((context as FragmentActivity).supportFragmentManager, "editProduct")
+    }
 
 }

@@ -62,6 +62,7 @@ dependencies {
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 
     //room добавить в новый проект ver. https://developer.android.com/training/data-storage/room?hl=ru
+    implementation "androidx.room:room-ktx:$room_version"
     implementation "androidx.room:room-runtime:$room_version" //добавить в новый проект
     kapt "androidx.room:room-compiler:$room_version" //плагин для подключения room
     annotationProcessor "androidx.room:room-compiler:$room_version" //добавить в новый проект
